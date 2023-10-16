@@ -1,27 +1,13 @@
 const express = require('express');
-// set up database
-const db = require('./config/mongoose');
-const port = 8000;
-const app = express();
 
-const expressLayouts = require('express-ejs-layouts');
-app.use(express.urlencoded());
-app.use(express.static('assets'));
-app.use(expressLayouts);
+const router = express.Router();
+const homeController = require('../controllers/home_controller');
+console.log('-->Router Loaded Successfully<--');
 
-// extract style and scripts from sub pages into the layout
-app.set('layout extractStyles', true);
-app.set('layout extractScripts', true);
+// route for home page
+router.get('/', homeController.home);
 
-// set up the view engine
-app.set('view engine', 'ejs');
-app.set('views', './views');
+// route for project request
+router.use('/project', require('./project'));
 
-// use express router
-app.use('/', require('./routes'));
-app.listen(port, (err) => {
-  if (err) {
-    console.log(`Error in running the server : ${err}`);
-  }
-  console.log(`Server is running on the port: ${port}`);
-});
+module.exports = router;
